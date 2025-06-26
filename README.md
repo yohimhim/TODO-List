@@ -15,7 +15,6 @@ with persistent storage backed by a relational database.
 - Clean and user-friendly interface
 - Backend validations for required fields
 
----
 
 ## 🛠️ Tech Stack
 
