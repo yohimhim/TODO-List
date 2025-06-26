@@ -4,13 +4,10 @@ import com.yohimhim.TODO_List.model.Task;
 import com.yohimhim.TODO_List.service.TaskService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +18,12 @@ public class PageController {
     @Autowired
     private TaskService taskService;
 
+    @GetMapping("/load")
+    public String loadDummyData() {
+        taskService.load();
+        return "redirect:/";
+    }
+
     @GetMapping("/")
     public String home(Model model) {
         List<Task> tasks = taskService.getAllTasks(); // should return List<Task>
@@ -28,13 +31,13 @@ public class PageController {
         return "index";
     }
 
-    @RequestMapping("/addTask") //post
+    @RequestMapping("/addTask")
     public String addTask() {
-        //taskService.addOrUpdateTask(task);
+
         return "addTask";
     }
 
-    @RequestMapping("/submitTask") //post
+    @RequestMapping("/submitTask")
     public String submitTask(HttpServletRequest req) {
 
         String title = req.getParameter("title");
@@ -54,12 +57,32 @@ public class PageController {
         return "redirect:/";
     }
 
-    @RequestMapping("/editTask")
-    public String editTask(@RequestParam("id") int id) {
+    @RequestMapping("/editTaskForm/{id}")
+    public String editTaskForm(@PathVariable int id, Model model) {
 
-        taskService.editTask(id);
-        return "update";
-
+        Task task = taskService.getTaskById(id);
+        model.addAttribute("task", task);
+        return "editTask";
     }
+
+    @PostMapping("/editTaskForm/{id}")
+    public String submitEditForm(@PathVariable int id, @RequestParam String title, @RequestParam String description, @RequestParam String deadline) {
+
+        LocalDate parsed = LocalDate.parse(deadline);
+        Date utilDate = java.sql.Date.valueOf(parsed);
+        taskService.editTask(id, title, description, utilDate);
+        return "redirect:/";
+    }
+
+    @RequestMapping("/completeTask")
+    public String isCompleted(@RequestParam("id") int id) {
+
+        Task task = taskService.getTaskById(id);
+        task.setCompleted(!task.getCompleted());
+        taskService.saveState(task);
+
+        return "redirect:/";
+    }
+
 
 }

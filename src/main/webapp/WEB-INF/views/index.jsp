@@ -1,11 +1,20 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
     <title>TODO List</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
+
+    <style>
+      .completed {
+        text-decoration: line-through;
+        color: gray;
+        opacity: 0.6;
+      }
+    </style>
+
 </head>
 <body>
 
@@ -24,20 +33,20 @@
     </c:if>
 
     <c:forEach var="task" items="${tasks}">
-        <div class="task-card">
+        <div class="task-card ${task.completed ? 'completed' : ''}">
             <div class="task-info">
                 <div class="task-title">${task.title}</div>
                 <div class="task-desc">${task.description}</div>
-                <div class="task-date">Due ${task.deadline}</div>
+                <div class="task-date">Due <fmt:formatDate value="${task.deadline}" pattern="MM/dd/yy" /></div>
             </div>
         </div>
         <div class="task-actions">
             <form action="completeTask" style="display:inline;">
                 <input type="hidden" name="id" value="${task.id}">
-                <button type="submit" class="completed">✔</button>
+                <button type="submit">✔</button>
             </form>
 
-            <form action="editTask" style="display:inline;">
+            <form action="${pageContext.request.contextPath}/editTaskForm/${task.id}" style="display:inline;">
                 <input type="hidden" name="id" value="${task.id}">
                 <button type="submit" class="edit">edit</button>
             </form>
