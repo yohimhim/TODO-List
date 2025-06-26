@@ -32,7 +32,10 @@
             </div>
         </div>
         <div class="task-actions">
-            <button class="completed">✔</button>
+            <form action="completeTask" style="display:inline;">
+                <input type="hidden" name="id" value="${task.id}">
+                <button type="submit" class="completed">✔</button>
+            </form>
 
             <form action="editTask" style="display:inline;">
                 <input type="hidden" name="id" value="${task.id}">
