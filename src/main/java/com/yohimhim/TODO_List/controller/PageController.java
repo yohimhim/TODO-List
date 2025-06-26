@@ -2,17 +2,17 @@ package com.yohimhim.TODO_List.controller;
 
 import com.yohimhim.TODO_List.model.Task;
 import com.yohimhim.TODO_List.service.TaskService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -28,17 +28,36 @@ public class PageController {
         return "index";
     }
 
-    @GetMapping("/addTask") //post
+    @RequestMapping("/addTask") //post
     public String addTask() {
-
         //taskService.addOrUpdateTask(task);
-
         return "addTask";
     }
 
-    public String updateTask() {
+    @RequestMapping("/submitTask") //post
+    public String submitTask(HttpServletRequest req) {
 
-        //taskService.addOrUpdateTask();
+        String title = req.getParameter("title");
+        String description = req.getParameter("description");
+        String rawDeadline = req.getParameter("deadline");
+        LocalDate deadline = LocalDate.parse(rawDeadline);
+        Date utilDate = java.sql.Date.valueOf(deadline);
+
+        taskService.addOrUpdateTask(title, description, utilDate);
+
+        return "redirect:/";
+    }
+
+    @RequestMapping("/deleteTask")
+    public String deleteTask(@RequestParam("id") int id) {
+        taskService.deleteTask(id);
+        return "redirect:/";
+    }
+
+    @RequestMapping("/editTask")
+    public String editTask(@RequestParam("id") int id) {
+
+        taskService.editTask(id);
         return "update";
 
     }

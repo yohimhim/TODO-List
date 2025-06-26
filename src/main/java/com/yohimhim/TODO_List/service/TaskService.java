@@ -21,7 +21,16 @@ public class TaskService {
 
     }
 
-    public Task addOrUpdateTask(Task task) {
+    public Task addOrUpdateTask(String title, String desc, Date deadline) {
+
+
+        Task task = new Task();
+
+
+
+        task.setTitle(title);
+        task.setDescription(desc);
+        task.setDeadline(deadline);
 
         return repo.save(task);
 
@@ -40,4 +49,15 @@ public class TaskService {
     }
 
 
+    public void deleteTask(int id) {
+
+        repo.deleteById(id);
+
+    }
+
+    public void editTask(int id) {
+
+
+
+    }
 }

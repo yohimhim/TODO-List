@@ -32,10 +32,18 @@
             </div>
         </div>
         <div class="task-actions">
-                        <button class="completed">✔</button>
-                        <button class="edit">edit</button>
-                        <button class="delete">delete</button>
-                    </div>
+            <button class="completed">✔</button>
+
+            <form action="editTask" style="display:inline;">
+                <input type="hidden" name="id" value="${task.id}">
+                <button type="submit" class="edit">edit</button>
+            </form>
+
+            <form action="deleteTask" style="display:inline;">
+                <input type="hidden" name="id" value="${task.id}">
+                <button type="submit" class="delete">delete</button>
+            </form>
+        </div>
     </c:forEach>
 
 </div>
