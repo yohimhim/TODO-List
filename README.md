@@ -1,3 +1,9 @@
+# 📝 TODO List Web Application
+
+A simple full-stack TODO List application built using **Spring Boot**, **JSP**, and **PostgreSQL**.  
+This project allows users to manage tasks — add, view, edit, delete, and mark them as completed —  
+with persistent storage backed by a relational database.
+
 ## ✨ Features
 
 - Add new tasks with title, optional description, and deadline
